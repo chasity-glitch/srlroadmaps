@@ -319,14 +319,18 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
 
   <!-- DASHBOARD -->
   <div class="tab-content active" id="tab-dashboard">
-    <div class="prompt-card" id="fellow-prompt-display">
-      <div class="prompt-eyebrow">Exit Ticket Prompt</div>
-      <div class="prompt-week" id="dash-prompt-week"></div>
-      <div class="prompt-text loading" id="dash-prompt-text">Loading this week&rsquo;s prompt&hellip;</div>
-    </div>
-    <div class="prompt-card" id="mentor-prompt-display" style="background:#1a1a1a;display:none;margin-bottom:16px;">
-      <div class="prompt-eyebrow" style="color:rgba(255,255,255,.5);">Mentor Reflection</div>
-      <div class="prompt-text loading" id="mentor-prompt-text" style="color:#fff;">Loading mentor prompt&hellip;</div>
+    <div id="exit-ticket-section" style="margin-bottom:16px;">
+      <a id="exit-ticket-btn" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pink);border-radius:var(--radius);padding:18px 20px;text-decoration:none;transition:background .15s;">
+        <div>
+          <div style="font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:4px;">This Week</div>
+          <div style="font-size:17px;font-weight:800;color:#fff;">Weekly Exit Ticket</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.75);margin-top:2px;" id="exit-ticket-week-label"></div>
+        </div>
+        <div style="font-size:22px;color:#fff;">&#8594;</div>
+      </a>
+      <div id="exit-ticket-no-link" style="display:none;background:#f5f5f5;border-radius:var(--radius);padding:16px 20px;">
+        <div style="font-size:12px;color:#aaa;font-weight:700;">No exit ticket link set yet. Check back soon.</div>
+      </div>
     </div>
     <div id="bryc-points-section" class="hidden">
       <div class="section-label">BRYC Points</div>
@@ -458,19 +462,19 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
   </div>
   <div class="pm-prompt-section" id="pm-prompt-section">
     <div class="pm-prompt-card">
-      <h3>&#127891; Fellow Exit Ticket Prompt</h3>
-      <textarea class="prompt-textarea" id="pm-prompt-ta" placeholder="Type this week&rsquo;s Fellow reflection prompt&hellip;"></textarea>
-      <div class="save-row" style="margin-top:0;">
-        <button class="save-btn" id="pm-prompt-save-btn">Update Fellow Prompt</button>
-        <div class="save-status" id="pm-prompt-status"></div>
+      <h3>&#127891; Weekly Exit Ticket Link</h3>
+      <input type="url" class="prompt-textarea" id="pm-exit-link-input" placeholder="Paste Google Form link here&hellip;" style="min-height:auto;padding:12px 14px;resize:none;">
+      <div class="save-row" style="margin-top:8px;">
+        <button class="save-btn" id="pm-exit-link-save-btn">Update Link</button>
+        <div class="save-status" id="pm-exit-link-status"></div>
       </div>
     </div>
     <div class="pm-prompt-card" style="margin-top:12px;">
-      <h3>&#129309; Mentor Reflection Prompt</h3>
-      <textarea class="prompt-textarea" id="pm-mentor-prompt-ta" placeholder="Type this week&rsquo;s mentor reflection prompt&hellip;"></textarea>
-      <div class="save-row" style="margin-top:0;">
-        <button class="save-btn" id="pm-mentor-prompt-save-btn">Update Mentor Prompt</button>
-        <div class="save-status" id="pm-mentor-prompt-status"></div>
+      <h3>&#128197; Week Label <span style="font-weight:400;color:#aaa;font-size:11px;">(e.g. "Week of Oct 5")</span></h3>
+      <input type="text" class="prompt-textarea" id="pm-prompt-ta" placeholder="Week of&hellip;" style="min-height:auto;padding:12px 14px;resize:none;">
+      <div class="save-row" style="margin-top:8px;">
+        <button class="save-btn" id="pm-prompt-save-btn">Update Week Label</button>
+        <div class="save-status" id="pm-prompt-status"></div>
       </div>
     </div>
   </div>
@@ -555,12 +559,12 @@ function localFetch(action, payload) {
   const gk = 'bryc_srl_global';
   if (action === 'loadFellow') { const r = localStorage.getItem(fk); return r ? JSON.parse(r) : {ok:true,data:null}; }
   if (action === 'saveFellow') { const ex = JSON.parse(localStorage.getItem(fk)||'{}'); localStorage.setItem(fk, JSON.stringify({...ex,...payload.data})); return {ok:true}; }
-  if (action === 'loadPrompt') { const r = localStorage.getItem(gk); const g = r ? JSON.parse(r) : {}; return {ok:true, prompt: g.prompt||'', promptWeek: g.promptWeek||'', mentorPrompt: g.mentorPrompt||''}; }
+  if (action === 'loadPrompt') { const r = localStorage.getItem(gk); const g = r ? JSON.parse(r) : {}; return {ok:true, exitTicketLink: g.exitTicketLink||'', promptWeek: g.promptWeek||'', mentorPrompt: g.mentorPrompt||''}; }
   if (action === 'loadRoster') { return {ok:true, fellows:[
     {id:'fellow_demo_1',name:'Demo Fellow 1',grade:'9th',pm:'pm_kendrick'},
     {id:'fellow_demo_2',name:'Demo Fellow 2',grade:'10th',pm:'pm_lauren'},
   ]}; }
-  if (action === 'savePrompt') { const ex = JSON.parse(localStorage.getItem(gk)||'{}'); const update = {}; if(payload.prompt!==undefined) update.prompt=payload.prompt; if(payload.promptWeek!==undefined) update.promptWeek=payload.promptWeek; if(payload.mentorPrompt!==undefined) update.mentorPrompt=payload.mentorPrompt; localStorage.setItem(gk, JSON.stringify({...ex,...update})); return {ok:true}; }
+  if (action === 'savePrompt') { const ex = JSON.parse(localStorage.getItem(gk)||'{}'); const update = {}; if(payload.exitTicketLink!==undefined) update.exitTicketLink=payload.exitTicketLink; if(payload.promptWeek!==undefined) update.promptWeek=payload.promptWeek; if(payload.mentorPrompt!==undefined) update.mentorPrompt=payload.mentorPrompt; localStorage.setItem(gk, JSON.stringify({...ex,...update})); return {ok:true}; }
   return {ok:true};
 }
 
@@ -609,10 +613,7 @@ function renderRoadmap() {
   const f = S.fellow;
   document.getElementById('rh-name').textContent = f?.name||'';
   document.getElementById('rh-meta').textContent = f ? f.grade+' Grade · '+((S.role==='mentor'||S.role==='pm'||S.role==='pm-view')?'Viewing':'My Roadmap') : '';
-  const fpd = document.getElementById('fellow-prompt-display');
-  const mpd = document.getElementById('mentor-prompt-display');
-  if (fpd) fpd.style.display = S.role==='mentor' ? 'none' : '';
-  if (mpd) mpd.style.display = S.role==='mentor' ? '' : 'none';
+
   const backBtn = document.getElementById('back-to-pm-btn');
   if (backBtn) backBtn.classList.toggle('hidden', !(S.role==='mentor'||S.role==='pm'||S.role==='pm-view'));
   const ro = S.role==='mentor'||S.role==='pm'||S.role==='pm-view';
@@ -633,7 +634,7 @@ function renderRoadmap() {
   const d = (f && S.data[f.id]) || {};
   if (d.future) { ['1','2','3'].forEach(n => { const el=document.getElementById('future-'+n); if(el) el.value=d.future[n]||''; }); }
   if (d.colleges) { ['1','2'].forEach(n => { const el=document.getElementById('college-'+n); if(el) el.value=d.colleges[n]||''; }); }
-  const pmSel = document.getElementById('fellow-pm-select'); if(pmSel&&d.pm) pmSel.value=d.pm;
+  const pmSel = document.getElementById('fellow-pm-select'); if(pmSel) pmSel.value=d.pm||S.fellow?.pm||'';
   const c=document.getElementById('career-1'); if(c&&d.career) c.value=d.career;
   renderSEL(d, ro);
   renderGPA(d, ro);
@@ -735,23 +736,28 @@ function renderPMList() {
 // ── PROMPT ─────────────────────────────────────────────────────
 async function loadPrompt() {
   const r = await apiFetch('loadPrompt');
-  const txt = r.prompt||'';
+  const link = r.exitTicketLink||'';
   const wk = r.promptWeek||'';
-  const mentorTxt = r.mentorPrompt||'';
-  const wkEl=document.getElementById('exit-week'); if(wkEl) wkEl.textContent=wk||'This week';
-  const tl=document.getElementById('exit-link'); if(tl) tl.href=CONFIG.EXIT_TICKET_FORM_URL||'#';
-  const pt=document.getElementById('dash-prompt-text');
-  if(pt) { pt.className='prompt-text'+(txt?'':' loading'); pt.textContent=txt||'No prompt set yet. Check back soon.'; }
-  const pw=document.getElementById('dash-prompt-week'); if(pw) pw.textContent=wk;
-  const pmTA=document.getElementById('pm-prompt-ta'); if(pmTA) pmTA.value=txt;
-  const pmMTA=document.getElementById('pm-mentor-prompt-ta'); if(pmMTA) pmMTA.value=mentorTxt;
-  // Show mentor prompt on roadmap if mentor role
-  const mPromptCard = document.getElementById('mentor-prompt-display');
-  if (mPromptCard) {
-    mPromptCard.style.display = (S.role==='mentor') ? '' : 'none';
-    const mpt = document.getElementById('mentor-prompt-text');
-    if (mpt) { mpt.className='prompt-text'+(mentorTxt?'':' loading'); mpt.textContent=mentorTxt||'No mentor prompt set yet.'; }
+  // Update exit ticket button
+  const btn = document.getElementById('exit-ticket-btn');
+  const noLink = document.getElementById('exit-ticket-no-link');
+  const wkLabel = document.getElementById('exit-ticket-week-label');
+  if (btn && noLink) {
+    if (link) {
+      btn.href = link;
+      btn.style.display = 'flex';
+      noLink.style.display = 'none';
+    } else {
+      btn.style.display = 'none';
+      noLink.style.display = 'block';
+    }
   }
+  if (wkLabel) wkLabel.textContent = wk;
+  // PM fields
+  const pmLinkInput = document.getElementById('pm-exit-link-input');
+  if (pmLinkInput) pmLinkInput.value = link;
+  const pmTA = document.getElementById('pm-prompt-ta');
+  if (pmTA) pmTA.value = wk;
 }
 
 // ── DATA ───────────────────────────────────────────────────────
@@ -897,24 +903,23 @@ function bindEvents() {
     updateGPAHero(collectGrades());
     scheduleAutoSave();
   });
+  document.getElementById('pm-exit-link-save-btn')?.addEventListener('click', async ()=>{
+    const btn=document.getElementById('pm-exit-link-save-btn');
+    const st=document.getElementById('pm-exit-link-status');
+    btn.disabled=true; st.className='save-status'; st.textContent='Saving...';
+    const link=document.getElementById('pm-exit-link-input')?.value||'';
+    const r=await apiFetch('savePrompt',{exitTicketLink:link});
+    if(r.ok){ st.textContent='Link updated!'; st.className='save-status ok'; await loadPrompt(); }
+    else { st.textContent='Error.'; st.className='save-status err'; }
+    btn.disabled=false; setTimeout(()=>{st.textContent='';st.className='save-status';},3000);
+  });
   document.getElementById('pm-prompt-save-btn')?.addEventListener('click', async ()=>{
     const btn=document.getElementById('pm-prompt-save-btn');
     const st=document.getElementById('pm-prompt-status');
     btn.disabled=true; st.className='save-status'; st.textContent='Saving...';
-    const txt=document.getElementById('pm-prompt-ta')?.value||'';
-    const wk='Week of '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    const r=await apiFetch('savePrompt',{prompt:txt,promptWeek:wk});
-    if(r.ok){ st.textContent='Prompt updated!'; st.className='save-status ok'; await loadPrompt(); }
-    else { st.textContent='Error.'; st.className='save-status err'; }
-    btn.disabled=false; setTimeout(()=>{st.textContent='';st.className='save-status';},3000);
-  });
-  document.getElementById('pm-mentor-prompt-save-btn')?.addEventListener('click', async ()=>{
-    const btn=document.getElementById('pm-mentor-prompt-save-btn');
-    const st=document.getElementById('pm-mentor-prompt-status');
-    btn.disabled=true; st.className='save-status'; st.textContent='Saving...';
-    const txt=document.getElementById('pm-mentor-prompt-ta')?.value||'';
-    const r=await apiFetch('savePrompt',{mentorPrompt:txt});
-    if(r.ok){ st.textContent='Mentor prompt updated!'; st.className='save-status ok'; await loadPrompt(); }
+    const wk=document.getElementById('pm-prompt-ta')?.value||'';
+    const r=await apiFetch('savePrompt',{promptWeek:wk});
+    if(r.ok){ st.textContent='Week label updated!'; st.className='save-status ok'; await loadPrompt(); }
     else { st.textContent='Error.'; st.className='save-status err'; }
     btn.disabled=false; setTimeout(()=>{st.textContent='';st.className='save-status';},3000);
   });
