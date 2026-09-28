@@ -460,6 +460,16 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
     <h2 id="pm-topbar-title">SRL Roadmaps</h2>
     <button data-action="pm-logout">Sign Out</button>
   </div>
+  <div id="mentor-exit-ticket-wrap" style="padding:16px 20px 0;display:none;">
+    <a id="mentor-exit-ticket-btn" href="#" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--pink);border-radius:var(--radius);padding:18px 20px;text-decoration:none;transition:background .15s;">
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.65);margin-bottom:4px;">This Week</div>
+        <div style="font-size:17px;font-weight:800;color:#fff;">Weekly Exit Ticket</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75);margin-top:2px;" id="mentor-exit-ticket-week"></div>
+      </div>
+      <div style="font-size:22px;color:#fff;">&#8594;</div>
+    </a>
+  </div>
   <div class="pm-prompt-section" id="pm-prompt-section">
     <div class="pm-prompt-card">
       <h3>&#127891; Weekly Exit Ticket Link</h3>
@@ -753,6 +763,15 @@ async function loadPrompt() {
     }
   }
   if (wkLabel) wkLabel.textContent = wk;
+  // Mentor list exit ticket banner
+  const mentorWrap = document.getElementById('mentor-exit-ticket-wrap');
+  const mentorBtn = document.getElementById('mentor-exit-ticket-btn');
+  const mentorWk = document.getElementById('mentor-exit-ticket-week');
+  if (mentorWrap && mentorBtn) {
+    mentorWrap.style.display = (S.role==='mentor' && link) ? 'block' : 'none';
+    mentorBtn.href = link || '#';
+    if (mentorWk) mentorWk.textContent = wk;
+  }
   // PM fields
   const pmLinkInput = document.getElementById('pm-exit-link-input');
   if (pmLinkInput) pmLinkInput.value = link;
