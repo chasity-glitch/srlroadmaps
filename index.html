@@ -225,9 +225,27 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
 }
 .hidden { display: none !important; }
 
+/* LOADING SCREEN */
+.loading-screen { position: fixed; inset: 0; background: #fff; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+.loading-screen.hidden { display: none !important; }
+.loading-wordmark { font-size: 12px; font-weight: 900; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; }
+.loading-title { font-size: 26px; font-weight: 900; color: var(--black); }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid #f0f0f0; border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
+.loading-msg { font-size: 13px; color: #aaa; font-weight: 700; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* STORE MODAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
 .modal-overlay.hidden { display: none !important; }
+
+/* LOADING SCREEN */
+.loading-screen { position: fixed; inset: 0; background: #fff; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
+.loading-screen.hidden { display: none !important; }
+.loading-wordmark { font-size: 12px; font-weight: 900; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; }
+.loading-title { font-size: 26px; font-weight: 900; color: var(--black); }
+.loading-spinner { width: 40px; height: 40px; border: 3px solid #f0f0f0; border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
+.loading-msg { font-size: 13px; color: #aaa; font-weight: 700; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .store-modal { background: #fff; border-radius: 20px 20px 0 0; padding: 28px 24px 36px; width: 100%; max-width: 680px; animation: slideUp .25s ease; }
 @keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 .store-modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
@@ -257,6 +275,12 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
 </style>
 </head>
 <body>
+<div id="loading-screen" class="loading-screen">
+  <div class="loading-wordmark">Baton Rouge Youth Coalition</div>
+  <div class="loading-title">SRL Roadmap</div>
+  <div class="loading-spinner"></div>
+  <div class="loading-msg" id="loading-msg">Loading&hellip;</div>
+</div>
 <div id="app">
 
 <!-- LANDING -->
@@ -728,7 +752,12 @@ function renderPMList() {
     (!gf||f.grade===gf) &&
     (!pmf||f.pm===pmf)
   );
-  const getPts = (id) => { const d=S.data[id]; return d&&d.bryc_points_total!==undefined ? d.bryc_points_total : null; };
+  const getPts = (id) => {
+    const d = S.data[id]; if (!d) return null;
+    const earned = Object.values(d.bryc_pts_weekly||{}).reduce((a,b)=>a+(parseInt(b)||0),0);
+    const spent = (d.store_history||[]).reduce((a,h)=>a+(h.amount||0),0);
+    return earned - spent;
+  };
   list.innerHTML = filtered.length
     ? filtered.map(f => {
         const p = getPts(f.id);
@@ -826,22 +855,33 @@ async function save(collectFn, statusId, btnId) {
 
 // ── AUTH ───────────────────────────────────────────────────────
 async function login() {
+  const ls = document.getElementById('loading-screen');
+  const lm = document.getElementById('loading-msg');
   const pin=(document.getElementById('pin-input')?.value||'').trim();
   const role=document.querySelector('.role-tab.active')?.dataset.role||'fellow';
   const err=document.getElementById('login-error');
   err.textContent='';
   if (role==='fellow' && !S.fellow) { err.textContent='Please select your name first.'; return; }
   if (pin!==CONFIG.PASSWORDS[role]) { err.textContent='Incorrect password. Try again.'; return; }
-  if (role==='pm') { S.role='pm'; await loadPrompt(); await loadAllFellowData(); setState({view:'pm'}); return; }
+  if (role==='pm') {
+    S.role='pm';
+    if(ls){ls.classList.remove('hidden');if(lm)lm.textContent='Loading Fellow data…';}
+    await loadPrompt(); await loadAllFellowData();
+    if(ls) ls.classList.add('hidden');
+    setState({view:'pm'}); return;
+  }
   if (role==='mentor') {
     S.role='mentor';
-    await loadPrompt();
-    await loadAllFellowData();
+    if(ls){ls.classList.remove('hidden');if(lm)lm.textContent='Loading Fellow data…';}
+    await loadPrompt(); await loadAllFellowData();
+    if(ls) ls.classList.add('hidden');
     setState({view:'pm'}); return;
   }
   S.role=role;
+  if(ls){ls.classList.remove('hidden');if(lm)lm.textContent='Opening your roadmap…';}
   await loadFellow(S.fellow.id);
   await loadPrompt();
+  if(ls) ls.classList.add('hidden');
   setState({view:'roadmap'});
 }
 
@@ -1141,11 +1181,13 @@ async function loadAllFellowData() {
 }
 
 async function init() {
+  const ls = document.getElementById('loading-screen');
   bindEvents();
   await loadRoster();
   initSearch();
   await loadPrompt();
   renderPMList();
+  if(ls) ls.classList.add('hidden');
 }
 
 async function loadRoster() {
