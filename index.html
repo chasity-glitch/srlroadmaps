@@ -350,7 +350,7 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
       </div>
     </div>
 
-    <div class="section-label">My Future SELF Goals</div>
+    <div class="section-label">My Future 3-2-1</div>
     <div class="card">
       <div style="margin-bottom:14px;">
         <div style="font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">My Program Manager</div>
@@ -831,10 +831,11 @@ async function login() {
   err.textContent='';
   if (role==='fellow' && !S.fellow) { err.textContent='Please select your name first.'; return; }
   if (pin!==CONFIG.PASSWORDS[role]) { err.textContent='Incorrect password. Try again.'; return; }
-  if (role==='pm') { S.role='pm'; await loadPrompt(); setState({view:'pm'}); return; }
+  if (role==='pm') { S.role='pm'; await loadPrompt(); await loadAllFellowData(); setState({view:'pm'}); return; }
   if (role==='mentor') {
     S.role='mentor';
     await loadPrompt();
+    await loadAllFellowData();
     setState({view:'pm'}); return;
   }
   S.role=role;
@@ -888,6 +889,7 @@ function bindEvents() {
       const sk=tgt.dataset.skill; const wi=tgt.dataset.week;
       document.querySelectorAll(`.score-btn[data-skill="${sk}"][data-week="${wi}"]`).forEach(b=>b.classList.remove('on'));
       tgt.classList.add('on');
+      scheduleAutoSave();
       return;
     }
     if (a==='pm-open') {
@@ -1127,6 +1129,11 @@ async function autoSave() {
   }
 }
 
+// Load data for all Fellows so PM list can show point totals
+async function loadAllFellowData() {
+  await Promise.all(FELLOWS.map(f => loadFellow(f.id)));
+}
+
 async function init() {
   bindEvents();
   await loadRoster();
@@ -1138,7 +1145,14 @@ async function init() {
 async function loadRoster() {
   const r = await apiFetch('loadRoster');
   if (r && r.fellows && r.fellows.length) {
-    FELLOWS = r.fellows;
+    // Normalize pm field -- accept "Kendrick" or "pm_kendrick" from sheet
+    FELLOWS = r.fellows.map(f => {
+      let pm = (f.pm||'').trim();
+      if (pm && !pm.startsWith('pm_')) {
+        pm = 'pm_' + pm.toLowerCase().replace(/\s+/g,'_');
+      }
+      return {...f, pm};
+    });
   }
 }
 init();
