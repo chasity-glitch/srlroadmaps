@@ -224,10 +224,50 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
   .tops-grid { grid-template-columns: repeat(3, 1fr); }
 }
 .hidden { display: none !important; }
+/* SELF TOOLKIT REFLECTION */
+.tk-intro { font-size: 13px; color: #666; line-height: 1.45; margin-bottom: 4px; }
+.tk-step { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+.tk-step-title { font-size: 14px; font-weight: 800; color: var(--black); }
+.tk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tk-box { background: #fafafa; border: 1px solid #e8e8e8; border-radius: 10px; padding: 12px; }
+.tk-box .field-label { margin-top: 0; }
+.tk-box .future-input { width: 100%; margin-top: 8px; background: #fff; }
+.tk-def { font-size: 12px; color: #888; line-height: 1.4; margin-top: 6px; min-height: 0; }
+.tk-chips { display: flex; flex-direction: column; gap: 6px; }
+.tk-chip { text-align: left; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0e0e0; background: #fafafa; font-family: ProximaNova, sans-serif; font-size: 13px; font-weight: 700; color: var(--black); cursor: pointer; transition: all .12s; display: flex; gap: 10px; align-items: center; }
+.tk-chip::before { content: ''; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #ccc; flex-shrink: 0; background: #fff; }
+.tk-chip.on { border-color: var(--gold); background: var(--gold-pale); }
+.tk-chip.on::before { background: var(--gold); border-color: var(--gold); box-shadow: inset 0 0 0 3px #fff; }
+.tk-chip:disabled { cursor: default; opacity: .6; }
+.tk-empty { font-size: 13px; color: #aaa; font-style: italic; padding: 6px 0; }
+.tk-limit { font-size: 12px; font-weight: 700; color: #888; margin-top: 6px; min-height: 16px; }
+.tk-limit.warn { color: var(--pink); }
+.tk-limit.done { color: #22a04b; }
+@media (max-width: 560px) { .tk-pair { grid-template-columns: 1fr; } }
 
 /* LOADING SCREEN */
 .loading-screen { position: fixed; inset: 0; background: #fff; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
 .loading-screen.hidden { display: none !important; }
+/* SELF TOOLKIT REFLECTION */
+.tk-intro { font-size: 13px; color: #666; line-height: 1.45; margin-bottom: 4px; }
+.tk-step { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+.tk-step-title { font-size: 14px; font-weight: 800; color: var(--black); }
+.tk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tk-box { background: #fafafa; border: 1px solid #e8e8e8; border-radius: 10px; padding: 12px; }
+.tk-box .field-label { margin-top: 0; }
+.tk-box .future-input { width: 100%; margin-top: 8px; background: #fff; }
+.tk-def { font-size: 12px; color: #888; line-height: 1.4; margin-top: 6px; min-height: 0; }
+.tk-chips { display: flex; flex-direction: column; gap: 6px; }
+.tk-chip { text-align: left; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0e0e0; background: #fafafa; font-family: ProximaNova, sans-serif; font-size: 13px; font-weight: 700; color: var(--black); cursor: pointer; transition: all .12s; display: flex; gap: 10px; align-items: center; }
+.tk-chip::before { content: ''; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #ccc; flex-shrink: 0; background: #fff; }
+.tk-chip.on { border-color: var(--gold); background: var(--gold-pale); }
+.tk-chip.on::before { background: var(--gold); border-color: var(--gold); box-shadow: inset 0 0 0 3px #fff; }
+.tk-chip:disabled { cursor: default; opacity: .6; }
+.tk-empty { font-size: 13px; color: #aaa; font-style: italic; padding: 6px 0; }
+.tk-limit { font-size: 12px; font-weight: 700; color: #888; margin-top: 6px; min-height: 16px; }
+.tk-limit.warn { color: var(--pink); }
+.tk-limit.done { color: #22a04b; }
+@media (max-width: 560px) { .tk-pair { grid-template-columns: 1fr; } }
 .loading-wordmark { font-size: 12px; font-weight: 900; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; }
 .loading-title { font-size: 26px; font-weight: 900; color: var(--black); }
 .loading-spinner { width: 40px; height: 40px; border: 3px solid #f0f0f0; border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
@@ -237,10 +277,50 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
 /* STORE MODAL */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
 .modal-overlay.hidden { display: none !important; }
+/* SELF TOOLKIT REFLECTION */
+.tk-intro { font-size: 13px; color: #666; line-height: 1.45; margin-bottom: 4px; }
+.tk-step { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+.tk-step-title { font-size: 14px; font-weight: 800; color: var(--black); }
+.tk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tk-box { background: #fafafa; border: 1px solid #e8e8e8; border-radius: 10px; padding: 12px; }
+.tk-box .field-label { margin-top: 0; }
+.tk-box .future-input { width: 100%; margin-top: 8px; background: #fff; }
+.tk-def { font-size: 12px; color: #888; line-height: 1.4; margin-top: 6px; min-height: 0; }
+.tk-chips { display: flex; flex-direction: column; gap: 6px; }
+.tk-chip { text-align: left; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0e0e0; background: #fafafa; font-family: ProximaNova, sans-serif; font-size: 13px; font-weight: 700; color: var(--black); cursor: pointer; transition: all .12s; display: flex; gap: 10px; align-items: center; }
+.tk-chip::before { content: ''; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #ccc; flex-shrink: 0; background: #fff; }
+.tk-chip.on { border-color: var(--gold); background: var(--gold-pale); }
+.tk-chip.on::before { background: var(--gold); border-color: var(--gold); box-shadow: inset 0 0 0 3px #fff; }
+.tk-chip:disabled { cursor: default; opacity: .6; }
+.tk-empty { font-size: 13px; color: #aaa; font-style: italic; padding: 6px 0; }
+.tk-limit { font-size: 12px; font-weight: 700; color: #888; margin-top: 6px; min-height: 16px; }
+.tk-limit.warn { color: var(--pink); }
+.tk-limit.done { color: #22a04b; }
+@media (max-width: 560px) { .tk-pair { grid-template-columns: 1fr; } }
 
 /* LOADING SCREEN */
 .loading-screen { position: fixed; inset: 0; background: #fff; z-index: 999; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
 .loading-screen.hidden { display: none !important; }
+/* SELF TOOLKIT REFLECTION */
+.tk-intro { font-size: 13px; color: #666; line-height: 1.45; margin-bottom: 4px; }
+.tk-step { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+.tk-step-title { font-size: 14px; font-weight: 800; color: var(--black); }
+.tk-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tk-box { background: #fafafa; border: 1px solid #e8e8e8; border-radius: 10px; padding: 12px; }
+.tk-box .field-label { margin-top: 0; }
+.tk-box .future-input { width: 100%; margin-top: 8px; background: #fff; }
+.tk-def { font-size: 12px; color: #888; line-height: 1.4; margin-top: 6px; min-height: 0; }
+.tk-chips { display: flex; flex-direction: column; gap: 6px; }
+.tk-chip { text-align: left; padding: 10px 12px; border-radius: 8px; border: 1.5px solid #e0e0e0; background: #fafafa; font-family: ProximaNova, sans-serif; font-size: 13px; font-weight: 700; color: var(--black); cursor: pointer; transition: all .12s; display: flex; gap: 10px; align-items: center; }
+.tk-chip::before { content: ''; width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid #ccc; flex-shrink: 0; background: #fff; }
+.tk-chip.on { border-color: var(--gold); background: var(--gold-pale); }
+.tk-chip.on::before { background: var(--gold); border-color: var(--gold); box-shadow: inset 0 0 0 3px #fff; }
+.tk-chip:disabled { cursor: default; opacity: .6; }
+.tk-empty { font-size: 13px; color: #aaa; font-style: italic; padding: 6px 0; }
+.tk-limit { font-size: 12px; font-weight: 700; color: #888; margin-top: 6px; min-height: 16px; }
+.tk-limit.warn { color: var(--pink); }
+.tk-limit.done { color: #22a04b; }
+@media (max-width: 560px) { .tk-pair { grid-template-columns: 1fr; } }
 .loading-wordmark { font-size: 12px; font-weight: 900; letter-spacing: .18em; color: var(--gold); text-transform: uppercase; }
 .loading-title { font-size: 26px; font-weight: 900; color: var(--black); }
 .loading-spinner { width: 40px; height: 40px; border: 3px solid #f0f0f0; border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
@@ -399,6 +479,10 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
       <div class="field-label">1 Career I&rsquo;m Interested In</div>
       <input type="text" class="text-input" id="career-1" placeholder="Career or field&hellip;" style="width:100%">
     </div>
+
+
+    <div class="section-label">Unit 1 Rewind &middot; My SELF Toolkit</div>
+    <div class="card" id="toolkit-card"></div>
 
     <div class="section-label">TOPS Scholarship Requirements</div>
     <div class="card">
@@ -671,8 +755,92 @@ function renderRoadmap() {
   if (d.colleges) { ['1','2'].forEach(n => { const el=document.getElementById('college-'+n); if(el) el.value=d.colleges[n]||''; }); }
   const pmSel = document.getElementById('fellow-pm-select'); if(pmSel) pmSel.value=d.pm||S.fellow?.pm||'';
   const c=document.getElementById('career-1'); if(c&&d.career) c.value=d.career;
+  renderToolkit(d, ro);
   renderSEL(d, ro);
   renderGPA(d, ro);
+}
+
+
+// ── SELF TOOLKIT REFLECTION ───────────────────────────────────────────────────
+const TOOLKIT_COMMON = [
+  {id:'mood', name:'Mood Meter', def:'A four-color map that helps you name how you feel by checking your energy level and how pleasant or unpleasant you feel.', moves:['Check my Mood Meter color before I start homework','Name my color before a test or a hard conversation','Write down my color and one reason each night']},
+  {id:'mistakes', name:'Productive Mistakes', def:'A mistake you take the time to learn from and correct, so your brain gets stronger.', moves:['Redo one missed problem and write what I fixed','Ask myself "What did I learn?" when work is handed back','Share one mistake and my fix with my mentor']},
+  {id:'affirm', name:'Positive Affirmations', def:'Intentional self-talk you use to fight off the negative things your brain tells you.', moves:['Say my affirmation before a test, game, or performance','Put my affirmation where I will see it every day','Swap one negative thought for an affirmation each day']},
+  {id:'procras', name:'Procrastination Patterns', def:'Knowing why you delay and how you delay (rabbit hole, fake out, delayed start) so you can catch it early.', moves:['Name my pattern out loud when I catch myself delaying','Start homework by the same time every school day','Put my phone in another room during study time']},
+  {id:'why', name:'Inside Why / Outside Why', def:'Your inside why is caring about the work itself; your outside why is caring about the reward the work earns you.', moves:['Write my inside why at the top of my hardest assignment','Pick a reward for finishing my toughest task each week','Connect one assignment a week to my Future 3-2-1']},
+  null,
+  {id:'advocacy', name:'Self-Advocacy', def:'Understanding your needs, knowing what support might help, and communicating those needs to the people who can help you.', moves:['Ask one teacher a question during or after class','Sign up for BRYC tutoring in my toughest class','Email or talk to a teacher about a grade or missing work']},
+  {id:'locus', name:'Locus of Control', def:'Sorting what is in your control from what is out of your control, so you put your energy where it counts.', moves:['When I feel stressed, list what is in and out of my control','After a setback, pick one thing in my control and do it','Talk with my mentor about something out of my control']},
+];
+const TOOLKIT_START = {
+  '9th': {id:'start', name:'5-Minute Start', def:"When motivation isn't there, you plan the first and best thing to do for just five minutes, then you start.", moves:['Use a 5-Minute Start on my hardest assignment','Plan my first 5 minutes before I leave school','Set a 5-minute timer when I don\'t feel like starting']},
+  '10th': {id:'start', name:'Motivation Cheat Codes', def:'Go-to moves you pull out to get started and keep going when your motivation runs low.', moves:['Use one cheat code the moment my motivation drops','Try a new cheat code and rate how well it worked','Teach a friend or my mentor my best cheat code']},
+};
+function toolkitTools() {
+  const g = (S.fellow && S.fellow.grade) === '10th' ? '10th' : '9th';
+  return TOOLKIT_COMMON.map(t => t || TOOLKIT_START[g]);
+}
+function tkEsc(v) { return String(v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function tkOptions(sel) {
+  return '<option value="">Choose a tool&hellip;</option>' + toolkitTools().map(t => `<option value="${t.id}"${t.id===sel?' selected':''}>${t.name}</option>`).join('');
+}
+function tkDef(id) { const t = toolkitTools().find(x => x.id === id); return t ? t.def : ''; }
+function renderToolkitMoves(growId, chosen, ro) {
+  const wrap = document.getElementById('tk-moves'); if (!wrap) return;
+  const t = toolkitTools().find(x => x.id === growId);
+  if (!t) { wrap.innerHTML = '<div class="tk-empty">Pick the tool you want to get better at using to see suggested actions.</div>'; return; }
+  wrap.innerHTML = t.moves.map(m => `<button type="button" class="tk-chip${chosen.includes(m)?' on':''}" data-action="tk-move" data-move="${tkEsc(m)}" ${ro?'disabled':''}>${m}</button>`).join('');
+}
+function tkCount() {
+  const chips = document.querySelectorAll('.tk-chip.on').length;
+  const custom = (document.getElementById('tk-custom')?.value || '').trim() ? 1 : 0;
+  return chips + custom;
+}
+function tkUpdateLimit(warn) {
+  const el = document.getElementById('tk-limit'); if (!el) return;
+  const n = tkCount();
+  if (warn) { el.className = 'tk-limit warn'; el.textContent = 'You can only pick 2. Uncheck one to swap it.'; return; }
+  if (n >= 2) { el.className = 'tk-limit done'; el.textContent = '\u2713 2 of 2 actions chosen'; return; }
+  el.className = 'tk-limit warn';
+  el.textContent = n === 1 ? 'Choose 1 more action.' : 'Choose 2 actions.';
+}
+function renderToolkit(data, ro) {
+  const c = document.getElementById('toolkit-card'); if (!c) return;
+  const tk = data.toolkit || {};
+  const moves = Array.isArray(tk.moves) ? tk.moves : [];
+  c.innerHTML = `
+    <div class="tk-intro">Pull out your <b>My SELF Toolkit</b> handout. Look at your Grow It and Use It answers and your &ldquo;How often I use it&rdquo; ratings before you start.</div>
+    <div class="tk-pair" style="margin-top:14px;">
+      <div class="tk-box">
+        <div class="field-label">The tool I use really well</div>
+        <select class="text-input" id="tk-excel" ${ro?'disabled':''}>${tkOptions(tk.excel)}</select>
+        <div class="tk-def" id="tk-excel-def">${tkDef(tk.excel)}</div>
+        <textarea class="future-input" id="tk-excel-why" rows="3" placeholder="How do you know? Give one real example of you using it." ${ro?'disabled':''}>${tkEsc(tk.excel_why)}</textarea>
+      </div>
+      <div class="tk-box">
+        <div class="field-label">The tool I want to get better at using</div>
+        <select class="text-input" id="tk-grow" ${ro?'disabled':''}>${tkOptions(tk.grow)}</select>
+        <div class="tk-def" id="tk-grow-def">${tkDef(tk.grow)}</div>
+        <textarea class="future-input" id="tk-grow-why" rows="3" placeholder="Why this one? What would change if you used it more?" ${ro?'disabled':''}>${tkEsc(tk.grow_why)}</textarea>
+      </div>
+    </div>
+    <div class="tk-step"><div class="tk-step-title">I will do the following 2 actions each week to improve how I use this tool</div></div>
+    <div class="tk-chips" id="tk-moves"></div>
+    <input type="text" class="text-input" id="tk-custom" style="margin-top:8px;" placeholder="Or write my own action&hellip;" value="${tkEsc(tk.custom)}" ${ro?'disabled':''}>
+    <div class="tk-limit" id="tk-limit"></div>`;
+  renderToolkitMoves(tk.grow, moves, ro);
+  tkUpdateLimit(false);
+}
+function collectToolkit() {
+  if (!document.getElementById('tk-excel')) return (S.fellow && S.data[S.fellow.id] && S.data[S.fellow.id].toolkit) || {};
+  const v = id => document.getElementById(id)?.value || '';
+  return {
+    excel: v('tk-excel'), excel_why: v('tk-excel-why'),
+    grow: v('tk-grow'), grow_why: v('tk-grow-why'),
+    moves: Array.from(document.querySelectorAll('.tk-chip.on')).map(b => b.dataset.move),
+    custom: v('tk-custom'),
+    complete: !!(v('tk-excel') && v('tk-grow') && tkCount() === 2),
+  };
 }
 
 function renderSEL(data, ro) {
@@ -750,7 +918,7 @@ function renderPMList() {
   const filtered = FELLOWS.filter(f =>
     (!q||f.name.toLowerCase().includes(q)) &&
     (!gf||f.grade===gf) &&
-    (!pmf||f.pm===pmf)
+    (!pmf||f.pm.toLowerCase()===pmf.toLowerCase())
   );
   const getPts = (id) => {
     const d = S.data[id]; if (!d) return null;
@@ -926,6 +1094,10 @@ function bindEvents() {
     if (a==='inline-deduct') { inlineDeductPoints(); return; }
     if (a==='sel-fellow') { setFellow(tgt.dataset.fid); return; }
     if (a==='clear-fellow') { S.fellow=null; document.getElementById('sel-display').classList.remove('visible'); document.getElementById('fellow-search').value=''; return; }
+    if (a==='tk-move') {
+      if (!tgt.classList.contains('on') && tkCount() >= 2) { tkUpdateLimit(true); return; }
+      tgt.classList.toggle('on'); tkUpdateLimit(false); scheduleAutoSave(); return;
+    }
     if (a==='sel-score') {
       const sk=tgt.dataset.skill; const wi=tgt.dataset.week;
       document.querySelectorAll(`.score-btn[data-skill="${sk}"][data-week="${wi}"]`).forEach(b=>b.classList.remove('on'));
@@ -960,9 +1132,22 @@ function bindEvents() {
   document.getElementById('login-btn')?.addEventListener('click', login);
   document.getElementById('pin-input')?.addEventListener('keydown', e=>{ if(e.key==='Enter') login(); });
   // Auto-save on any input change in the roadmap
-  document.getElementById('screen-roadmap')?.addEventListener('input', () => scheduleAutoSave());
-  document.getElementById('screen-roadmap')?.addEventListener('change', () => {
+  document.getElementById('screen-roadmap')?.addEventListener('input', (e) => {
+    if (e.target && e.target.id === 'tk-custom') {
+      const chips = document.querySelectorAll('.tk-chip.on').length;
+      if (chips >= 2 && e.target.value.trim()) { e.target.value = ''; tkUpdateLimit(true); return; }
+      tkUpdateLimit(false);
+    }
+    scheduleAutoSave();
+  });
+  document.getElementById('screen-roadmap')?.addEventListener('change', (e) => {
     updateGPAHero(collectGrades());
+    const id = e.target && e.target.id;
+    if (id === 'tk-excel') document.getElementById('tk-excel-def').textContent = tkDef(e.target.value);
+    if (id === 'tk-grow') {
+      document.getElementById('tk-grow-def').textContent = tkDef(e.target.value);
+      renderToolkitMoves(e.target.value, [], false); tkUpdateLimit(false);
+    }
     scheduleAutoSave();
   });
   document.getElementById('pm-exit-link-save-btn')?.addEventListener('click', async ()=>{
@@ -1154,6 +1339,7 @@ async function autoSave() {
     sel: collectSEL(),
     grades: collectGrades(),
     bryc_pts_weekly: collectBrycPoints(),
+    toolkit: collectToolkit(),
   };
   S.data[fid] = merged;
   updateBrycTotals(merged);
