@@ -573,7 +573,8 @@ function localFetch(action, payload) {
   if (action === 'loadRoster') { return {ok:true, fellows:[
     {id:'fellow_demo_1',name:'Demo Fellow 1',grade:'9th',pm:'pm_kendrick'},
     {id:'fellow_demo_2',name:'Demo Fellow 2',grade:'10th',pm:'pm_lauren'},
-  ]}; }
+  ]};
+  if (action === 'loadAllFellows') { const keys = Object.keys(localStorage).filter(k=>k.startsWith('bryc_srl_fellow')); const fellows = {}; keys.forEach(k => { try { const d=JSON.parse(localStorage.getItem(k)); fellows[k.replace('bryc_srl_','')]=d; } catch(e){} }); return {ok:true, fellows}; } }
   if (action === 'savePrompt') { const ex = JSON.parse(localStorage.getItem(gk)||'{}'); const update = {}; if(payload.exitTicketLink!==undefined) update.exitTicketLink=payload.exitTicketLink; if(payload.promptWeek!==undefined) update.promptWeek=payload.promptWeek; if(payload.mentorPrompt!==undefined) update.mentorPrompt=payload.mentorPrompt; localStorage.setItem(gk, JSON.stringify({...ex,...update})); return {ok:true}; }
   return {ok:true};
 }
@@ -1129,9 +1130,14 @@ async function autoSave() {
   }
 }
 
-// Load data for all Fellows so PM list can show point totals
+// Load all Fellow data in one batch request
 async function loadAllFellowData() {
-  await Promise.all(FELLOWS.map(f => loadFellow(f.id)));
+  const r = await apiFetch('loadAllFellows');
+  if (r && r.fellows) {
+    Object.entries(r.fellows).forEach(([id, data]) => {
+      if (data) S.data[id] = data;
+    });
+  }
 }
 
 async function init() {
