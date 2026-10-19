@@ -716,6 +716,10 @@ body { font-family: ProximaNova, sans-serif; background: #f7f7f5; color: var(--b
 .fy-next-stop { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; text-align: right; }
 .fy-next-stop small { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: rgba(240,201,23,.7); }
 
+.fy-senior { background: var(--gold-pale); border: 1.5px solid #efdf86; border-left: 5px solid var(--gold-light); border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.45; color: #4a3f00; margin-bottom: 12px; }
+.fy-senior b { color: #000; }
+.fy-guess-cap { font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #888; margin-top: 10px; }
+
 </style>
 </head>
 <body>
@@ -1916,7 +1920,7 @@ function renderFY() {
   const passport = myEvents.length > 1 ? `<div class="fy-passport">${myEvents.map(e => {
     const got = fyCheckinDone(e, fy.events[e.id]); const open = ev && ev.id === e.id;
     return `<div class="fy-pass${got ? ' got' : ''}${open ? ' open' : ''}"><b>${fyEsc(e.name)}</b><i>${got ? '✓ Checked in' : open ? 'Open now' : fyEsc(e.when)}</i></div>`; }).join('')}</div>` : '';
-  const steps = [['checkin','Check in'],['deck','Build your deck'],['move','Next move'],['note','Note for May']];
+  const steps = [['checkin','Check in'],['deck','My involvement'],['move','Next move'],['note','Note for May']];
   if (!ro) {
     FYUI.view = FYUI.view || 'map'; FYUI.play = FYUI.view !== 'map';
     root.innerHTML = FYUI.view === 'map' ? fyMapHTML(fy, st, ev, first, passport) : fyStopScreen(FYUI.view, fy, ev, st);
@@ -1945,7 +1949,7 @@ function renderFY() {
 // ── PLAY MODE (Fellows): road map home + one stop at a time ───────
 const FY_STOPS = [
   { key: 'checkin', n: 1, title: 'Check in',        sub: 'How you feel about life after high school' },
-  { key: 'deck',    n: 2, title: 'Build your deck', sub: 'Every activity you do outside of class' },
+  { key: 'deck',    n: 2, title: 'My involvement', sub: 'Everything you do outside of class' },
   { key: 'move',    n: 3, title: 'Your next move',  sub: 'One thing to go after this year' },
   { key: 'note',    n: 4, title: 'A note for May',  sub: 'Sealed until May' },
 ];
@@ -1978,7 +1982,7 @@ function fyMapHTML(fy, st, ev, first, passport) {
     ${nx ? `<button class="fy-go" data-action="fy-go" data-to="${nx.key}"><span><small>${done ? 'Up next' : 'Start here'} · Stop ${nx.n}</small>${nx.title}</span><em>${fyEsc(nx.sub)}</em><b>Go →</b></button>`
          : `<div class="fy-go done"><span><small>All 4 stops done</small>See you in May</span><em>You can come back any time to add cards or update your next move.</em></div>`}
     <div class="fy-map-stats">
-      <div><b>${fy.deck.length}</b><span>cards</span></div>
+      <div><b>${fy.deck.length}</b><span>activities</span></div>
       <div><b>${fy.level.revealed ? s.level : '?'}</b><span>${fy.level.revealed ? FY.RUBRIC[s.level - 1].label : 'level'}</span></div>
       <div><b>${fy.moves.filter(m => (m.name || '').trim()).length}</b><span>next moves</span></div>
       <div><b>${fy.note.sealed ? fyIcon('note', 22) : '—'}</b><span>${fy.note.sealed ? 'sealed' : 'note'}</span></div>
@@ -2023,9 +2027,9 @@ function fyStopScreen(key, fy, ev, st) {
   if (key === 'deck') {
     total = 2; q = Math.min(q, 1); const self = fy.level.self;
     if (q === 0) {
-      body = `<div class="fy-play-card">${fyQ('Before you start: how involved are you right now?', '', `<div class="fy-hint" style="margin-top:0;">Make your best guess. You'll get your rating after you add your cards.</div>
+      body = `<div class="fy-play-card">${fyQ('Before you start: where do you think your involvement is right now?', '', `<div class="fy-senior"><b>This is a senior-year scale.</b> These levels describe seniors who are applying to college. You are not expected to be there yet. Most Fellows start at a 1 or 2, and that is a normal place to begin.</div><div class="fy-hint">Make your best guess. You'll see your rating after you add your activities.</div><div class="fy-guess-cap">Senior-year levels</div>
         <div class="fy-guess">${FY.RUBRIC.map(r => `<button class="fy-guess-tile${self === r.n ? ' on' : ''}" data-action="fy-level" data-n="${r.n}"><b>${r.n}</b><strong>${r.label}</strong><span>${r.need}</span></button>`).join('')}</div>`)}</div>`;
-      nav = fyPlayNav(0, 2, '', !!self).replace('Next →', 'Start building →');
+      nav = fyPlayNav(0, 2, '', !!self).replace('Next →', 'Add my activities →');
     } else { body = fyDeckHTML(fy, false); nav = fyNextStopNav('move', true); }
   }
   if (key === 'move') { body = fyMovesHTML(fy, false); nav = fyNextStopNav('note', false); }
@@ -2046,7 +2050,7 @@ function fyStopScreen(key, fy, ev, st) {
   return `<div class="fy-play">${fyPlayHead(stop, total, q)}${body}${nav}</div>`;
 }
 
-const FY_STOP_NAMES = { checkin: 'Stop 1: Check in', deck: 'Stop 2: Your deck', move: 'Stop 3: Next move', note: 'Stop 4: Note for May' };
+const FY_STOP_NAMES = { checkin: 'Stop 1: Check in', deck: 'Stop 2: My involvement', move: 'Stop 3: Next move', note: 'Stop 4: Note for May' };
 function fyReduced() { return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
 function fyCelebrate(fy, st, ro) {
   const lvl = fyDeckStats(fy.deck).level; const prev = FYUI.prev;
@@ -2055,7 +2059,7 @@ function fyCelebrate(fy, st, ro) {
   if (ro || !prev) return;
   let i = 0;
   if (fy.level.revealed && lvl > prev.lvl) { fyToast('Level up! Your rating is now ' + lvl, i++, true); fyConfetti(); }
-  if (fy.deck.length > prev.cards && fy.deck.length === FY.DECK_GOAL) fyToast('Full hand: ' + FY.DECK_GOAL + ' cards', i++);
+  if (fy.deck.length > prev.cards && fy.deck.length === FY.DECK_GOAL) fyToast(FY.DECK_GOAL + ' activities added', i++);
   Object.keys(st).forEach(k => { if (st[k] && !prev.st[k]) fyToast(FY_STOP_NAMES[k] + ' ✓', i++); });
   if (Object.values(st).every(Boolean) && !Object.values(prev.st).every(Boolean)) { fyToast('All 4 stops done. See you in May.', i++, true); fyConfetti(); }
 }
@@ -2095,7 +2099,7 @@ function fyCheckinHTML(fy, ev, ro) {
     const p = fy.events[x.id]; const main = x.kind === 'symposium' ? p.growth : p.quote;
     return `<div class="fy-past"><b>${fyEsc(x.name)}</b> · <span class="fy-dot ${p.mood}"></span>${fyEsc(p.word || FY.MOODS[p.mood].label)}${x.kind==='tour' && p.campus ? ' · ' + fyEsc(p.campus) : ''}${main ? `<div>&ldquo;${fyEsc(main)}&rdquo;</div>` : ''}</div>`; }).join('') : '';
   if (!ev) return `<div class="fy-sec" id="fy-sec-checkin">${fySecHead(1, 'checkin', 'Check in')}
-    <div class="card"><div class="fy-q">No check-in is open right now.</div><div class="fy-hint">You can still work on your deck and next move below.</div>${past}</div></div>`;
+    <div class="card"><div class="fy-q">No check-in is open right now.</div><div class="fy-hint">You can still add activities and work on your next move below.</div>${past}</div></div>`;
   const e = fy.events[ev.id] || {};
   let body = `<div class="fy-q">${ev.kind === 'explore' ? 'How do you feel about life after high school right now?' : 'How did today leave you feeling?'}</div>${fyMoodHTML(e, dis)}`;
   if (ev.kind === 'explore') body += `
@@ -2131,7 +2135,7 @@ function fyCheckinHTML(fy, ev, ro) {
       ${then.e.steal ? `<div style="margin-top:4px;">You wanted to start: <b>${fyEsc(then.e.steal)}</b></div>` : ''}</div>` : ''}
     <div class="fy-q">What's different about you since the fall?</div>
     <textarea class="fy-ta" data-fy="ev.growth" rows="3" ${dis}>${fyEsc(e.growth)}</textarea>
-    <div class="fy-q">Which card in your deck are you proudest of?</div>
+    <div class="fy-q">Which activity are you proudest of?</div>
     <select class="text-input" data-fy="ev.proud" ${dis}><option value="">Choose a card…</option>${fy.deck.map(c => `<option value="${c.id}"${e.proud===c.id?' selected':''}>${fyEsc(c.org || 'Untitled')}</option>`).join('')}</select>
     <div class="fy-q">What will you keep doing next year?</div>
     <textarea class="fy-ta" data-fy="ev.steal" rows="2" ${dis}>${fyEsc(e.steal)}</textarea>`;
@@ -2141,7 +2145,7 @@ function fyCheckinHTML(fy, ev, ro) {
 }
 
 function fyMeter(s, shown) {
-  return `<div class="fy-meter2"><div class="fy-meter2-top"><span>Deck meter</span>${shown ? `<b>Level ${s.level} · ${FY.RUBRIC[s.level-1].label}</b>` : '<b class="dim">Level hidden</b>'}</div>
+  return `<div class="fy-meter2"><div class="fy-meter2-top"><span>Involvement meter</span>${shown ? `<b>Level ${s.level} · ${FY.RUBRIC[s.level-1].label}</b>` : '<b class="dim">Level hidden</b>'}</div>
     <div class="fy-bar"><i style="width:${Math.min(100, s.acts / 10 * 100)}%"></i><span class="m" style="left:50%">5</span><span class="m" style="left:80%">8</span></div>
     <div class="fy-rating-stats light"><span><b>${s.acts}</b> activities</span><span><b>${s.multi}</b> more than one year</span><span><b>${s.lead}</b> leadership</span><span><b>${s.awards}</b> awards</span></div></div>`;
 }
@@ -2152,7 +2156,7 @@ function fyRubricBox(fy, ro) {
       <button class="fy-btn dark" data-action="fy-reveal" ${self ? '' : 'disabled'}>Reveal my rating</button></div>`);
   const next = FY.RUBRIC[s.level];
   const msg = !self ? '' : self === s.level ? 'Your guess matched your rating.'
-    : self > s.level ? 'You guessed higher than your rating. Check for missing cards, or treat this as your goal.'
+    : self > s.level ? 'You guessed higher than your rating. Check for missing activities, or treat this as your goal.'
     : "You guessed lower than your rating. You're doing more than you thought.";
   return fyMeter(s, true) + `<div class="fy-rating${FYUI.anim && FYUI.anim.reveal ? ' flip' : ''}">
     <div class="fy-rating-num"><small>Your rating</small>${s.level}<em>${R.label}</em></div>
@@ -2161,8 +2165,9 @@ function fyRubricBox(fy, ro) {
       ${msg ? `<div class="fy-rating-msg">${msg}${self ? ` <span>(You guessed ${self}.)</span>` : ''}</div>` : ''}
       <div class="fy-rating-stats"><span><b>${s.acts}</b> activities</span><span><b>${s.multi}</b> more than one year</span><span><b>${s.lead}</b> leadership</span><span><b>${s.awards}</b> awards</span></div>
       ${next ? `<div class="fy-rating-next"><b>To reach ${next.n} (${next.label}):</b> ${next.need}</div>` : ''}
+      <div class="fy-rating-next">Remember: this scale is for seniors. A 1 or 2 now is a normal starting point. You have until senior year to build.</div>
     </div></div>
-    <details class="fy-rubric"><summary>See all four levels</summary>${FY.RUBRIC.map(r => `<div><b>${r.n} · ${r.label}</b> ${r.need}</div>`).join('')}</details>`;
+    <details class="fy-rubric"><summary>See all four senior-year levels</summary>${FY.RUBRIC.map(r => `<div><b>${r.n} · ${r.label}</b> ${r.need}</div>`).join('')}</details>`;
 }
 function fyDeckHTML(fy, ro) {
   const G = fyG(); const s = fyDeckStats(fy.deck); const self = fy.level.self;
@@ -2175,15 +2180,15 @@ function fyDeckHTML(fy, ro) {
       <input type="text" class="text-input" data-fy="plan9.text" style="margin-top:8px;" placeholder="Name a team, club, or program" value="${fyEsc(p.text)}" ${ro?'disabled':''}>`;
   }
   if (G.resume && fy.deck.length) {
-    extra += `<div class="fy-q" style="margin-top:24px;">Turn your deck into a résumé</div>
+    extra += `<div class="fy-q" style="margin-top:24px;">Turn your activities into a résumé</div>
       <div class="fy-hint">Your cards, sorted into the BRYC résumé template. Copy and paste into your résumé doc.</div>
       <button class="fy-btn dark" data-action="fy-resume">${FYUI.showResume ? 'Hide résumé' : 'Show my résumé'}</button>
       ${FYUI.showResume ? fyResumeHTML(fy) : ''}`;
   }
-  return `<div class="fy-sec" id="fy-sec-deck">${fySecHead(2, 'deck', 'Build your deck', `${s.count} card${s.count===1?'':'s'}${s.count < FY.DECK_GOAL ? ' · goal ' + FY.DECK_GOAL : ''}`)}
+  return `<div class="fy-sec" id="fy-sec-deck">${fySecHead(2, 'deck', 'My involvement', `${s.count} card${s.count===1?'':'s'}${s.count < FY.DECK_GOAL ? ' · goal ' + FY.DECK_GOAL : ''}`)}
     <div class="card">
       ${FYUI.play ? '' : `<div class="fy-q">Before you start: how involved are you right now?</div>
-      <div class="fy-hint">Make your best guess. You'll get your rating after you add your cards.</div>
+      <div class="fy-senior"><b>This is a senior-year scale.</b> These levels describe seniors who are applying to college. You are not expected to be there yet. Most Fellows start at a 1 or 2, and that is a normal place to begin.</div><div class="fy-hint">Make your best guess. You'll see your rating after you add your activities.</div>
       <div class="fy-level">${FY.RUBRIC.map(l => `<button class="fy-lv${self===l.n?' on':''}" data-action="fy-level" data-n="${l.n}" ${ro?'disabled':''}><b>${l.n}</b><span>${l.label}</span></button>`).join('')}</div>`}
 
       <div class="fy-q" style="${FYUI.play ? 'margin-top:0' : 'margin-top:24px'};">Add a card for each activity you do outside of class.</div>
@@ -2269,7 +2274,7 @@ function fyMovesHTML(fy, ro) {
         <div class="fy-done-row"><span></span><button class="fy-btn dark" data-action="fy-medit" data-id="${m.id}">Done</button></div>`
       : `${m.plan ? `<div class="fy-card-flex">${fyEsc(m.plan)}</div>` : ''}${m.why ? `<div class="fy-card-flex" style="color:#666;">${fyEsc(m.why)}</div>` : ''}${m.step ? `<div class="fy-hint" style="margin:6px 0 0;"><b>First step:</b> ${fyEsc(m.step)}</div>` : ''}${m.link ? `<a href="${fyEsc(m.link)}" target="_blank" rel="noopener" class="fy-link">Open link →</a>` : ''}`}
       <div class="fy-pipe">${K.statuses.map(([id, l]) => `<button class="${status===id?'on':''}${id===K.win?' win':''}" data-action="fy-mstatus" data-id="${m.id}" data-s="${id}" ${dis}>${l}</button>`).join('')}</div>
-      ${status === K.win && m.kind !== 'deepen' && !m.carded && !ro ? `<button class="fy-btn" style="margin-top:10px;" data-action="fy-mcard" data-id="${m.id}">Add it to my deck</button>` : ''}
+      ${status === K.win && m.kind !== 'deepen' && !m.carded && !ro ? `<button class="fy-btn" style="margin-top:10px;" data-action="fy-mcard" data-id="${m.id}">Add it to my activities</button>` : ''}
     </div>`;
   }).join('');
   return `<div class="fy-sec" id="fy-sec-move">${fySecHead(3, 'move', 'Your next move', `${fy.moves.length} move${fy.moves.length===1?'':'s'}`)}
@@ -2468,12 +2473,12 @@ function renderInsights() {
     <div class="ins-dl" style="margin-bottom:10px;">
       <button class="fy-btn ghost" data-action="ins-dl" data-k="summary">⬇ Fellow summary CSV</button>
       <button class="fy-btn ghost" data-action="ins-dl" data-k="reflections">⬇ Check-ins CSV</button>
-      <button class="fy-btn ghost" data-action="ins-dl" data-k="deck">⬇ Activity deck CSV</button>
+      <button class="fy-btn ghost" data-action="ins-dl" data-k="deck">⬇ Activities CSV</button>
       <button class="fy-btn ghost" data-action="ins-dl" data-k="moves">⬇ Next moves CSV</button></div>
     <p class="fy-hint">Uses the search, grade, and PM filters above. Click a Fellow in any table to open their page.</p>
     <div class="ins-tiles">
       <div class="ins-tile"><div class="ins-tile-num">${checked.length}<span style="font-size:14px;color:#aaa;">/${N}</span></div><div class="ins-tile-lbl">Checked in</div><div class="ins-tile-sub">${fyEsc(ev.name)}</div></div>
-      <div class="ins-tile"><div class="ins-tile-num">${avgCards}</div><div class="ins-tile-lbl">Avg cards</div><div class="ins-tile-sub">${withDeck.length} started a deck</div></div>
+      <div class="ins-tile"><div class="ins-tile-num">${avgCards}</div><div class="ins-tile-lbl">Avg activities</div><div class="ins-tile-sub">${withDeck.length} added activities</div></div>
       <div class="ins-tile"><div class="ins-tile-num">${rows.filter(r => r.stops.move).length}</div><div class="ins-tile-lbl">Have a next move</div><div class="ins-tile-sub">${allMoves.length} total</div></div>
       <div class="ins-tile"><div class="ins-tile-num">${moving.length}</div><div class="ins-tile-lbl">Moves in motion</div><div class="ins-tile-sub">${wins.length} done or in</div></div>
       <div class="ins-tile"><div class="ins-tile-num" style="color:${late.length ? 'var(--pink)' : 'inherit'}">${late.length}</div><div class="ins-tile-lbl">Past due</div></div>
@@ -2484,10 +2489,10 @@ function renderInsights() {
         ${insBars(['yellow','green','red','blue'].map(k => ({ label: FY.MOODS[k].label + ' · ' + FY.MOODS[k].desc.split(' · ')[0] + '…', n: moodC[k] || 0, swatch: MOOD_HEX[k] })), checked.length)}
         <p class="ins-sub" style="margin:10px 0 6px;">Top words</p>${insBars(Object.entries(wordC).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([w,n]) => ({ label: w, n })), checked.length)}</div>
       ${eventCard}
-      <div class="ins-card"><h4>Involvement rating</h4><p class="ins-sub">BRYC Involvement Rubric, from each deck</p>
-        ${grades.map(g => { const gr = withDeck.filter(r => r.f.grade === g); return `<p class="ins-sub" style="margin:8px 0 4px;font-weight:800;color:#555;">${g} grade · ${gr.length} decks</p>` + insBars(FY.RUBRIC.map(R => ({ label: R.n + ' · ' + R.label, n: gr.filter(r => r.st.level === R.n).length })), gr.length); }).join('')}
+      <div class="ins-card"><h4>Involvement rating</h4><p class="ins-sub">BRYC Involvement Rubric, from each Fellow's activities</p>
+        ${grades.map(g => { const gr = withDeck.filter(r => r.f.grade === g); return `<p class="ins-sub" style="margin:8px 0 4px;font-weight:800;color:#555;">${g} grade · ${gr.length} Fellows with activities</p>` + insBars(FY.RUBRIC.map(R => ({ label: R.n + ' · ' + R.label, n: gr.filter(r => r.st.level === R.n).length })), gr.length); }).join('')}
         <p class="ins-sub" style="margin:12px 0 6px;">Guess vs. rating</p>${insBars([{ label: 'Guessed lower', n: calib.under }, { label: 'Matched', n: calib.match }, { label: 'Guessed higher', n: calib.over }])}</div>
-      <div class="ins-card"><h4>What's in the decks</h4><p class="ins-sub">Cards by type</p>${insBars(FY.TYPES.map(t => ({ label: t.label, n: typeC[t.id] || 0 })).sort((a,b)=>b.n-a.n))}
+      <div class="ins-card"><h4>Types of involvement</h4><p class="ins-sub">Activities by type</p>${insBars(FY.TYPES.map(t => ({ label: t.label, n: typeC[t.id] || 0 })).sort((a,b)=>b.n-a.n))}
         ${eighth.length ? `<p class="ins-sub" style="margin:12px 0 6px;">8th · What they'll try in 9th grade</p>${insBars(FY.TYPES.map(t => ({ label: t.label, n: plan9C[t.id] || 0 })).filter(x => x.n).sort((a,b)=>b.n-a.n))}` : ''}</div>
       <div class="ins-card"><h4>Next moves</h4><p class="ins-sub">What kind, and where each one stands</p>
         ${insBars(Object.entries(FY.MOVE_KINDS).map(([k, K]) => ({ label: K.short, n: kindC[k] || 0 })), allMoves.length)}
@@ -2534,7 +2539,7 @@ function insCSV(kind) {
   const esc = v => { const s = String(v == null ? '' : v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
   const csv = [head, ...body].map(r => r.map(esc).join(',')).join('\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
-  a.download = `${FY.CSV_PREFIX}_${kind}_${fyToday()}.csv`; document.body.appendChild(a); a.click(); a.remove();
+  a.download = `${FY.CSV_PREFIX}_${kind === 'deck' ? 'activities' : kind}_${fyToday()}.csv`; document.body.appendChild(a); a.click(); a.remove();
 }
 function insBind() {
   const ins = document.getElementById('pm-insights'); if (!ins) return;
